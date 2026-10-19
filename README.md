@@ -35,10 +35,9 @@ and tooling are proprietary and not included.
 
 ## Listen
 
-**▶ [Listening page](https://r7788380.github.io/speech-denoiser-sdk-results/)** —
+**▶ [Listening page](https://r7788380.github.io/speech-denoiser-sdk-results/)**
+([中文版](https://r7788380.github.io/speech-denoiser-sdk-results/zh.html)) —
 every clip below with an in-browser player, per-clip scores and spectrograms.
-(GitHub cannot play audio inside a README; the page is [`index.html`](index.html)
-served through GitHub Pages.)
 
 Five utterances from the public **VCTK-DEMAND** noisy test set (speakers p232 and
 p257, English, 16 kHz). Each is provided as the noisy input, the output of the
