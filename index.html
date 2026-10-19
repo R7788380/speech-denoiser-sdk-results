@@ -44,11 +44,18 @@
   table.results td.total, table.results tr.total td { font-weight: 600; }
   footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 14px; }
   a { color: var(--accent); }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .lang { font-size: 0.9rem; color: var(--muted); white-space: nowrap; margin-top: 10px; }
+  .lang b { color: var(--fg); font-weight: 600; }
+  .lang a { text-decoration: none; }
 </style>
 </head>
 <body>
 <main>
-  <h1>Neural Speech Denoiser — Listening Test</h1>
+  <div class="top">
+    <h1>Neural Speech Denoiser — Listening Test</h1>
+    <nav class="lang"><b>English</b>｜<a href="zh.html" lang="zh-Hant">中文</a></nav>
+  </div>
   <p class="lead">
     Five noisy utterances from the public VCTK-DEMAND test set, denoised by the compiled C library at its
     three model widths. All audio is 16 kHz mono; the enhanced clips are the library's int16 streaming

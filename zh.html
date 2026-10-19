@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speech Denoiser — Listening Test</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1f2328; --muted: #656d76; --line: #d0d7de; --card: #f6f8fa; --accent: #0969da;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0d1117; --fg: #e6edf3; --muted: #8d96a0; --line: #30363d; --card: #161b22; --accent: #4493f8; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "Noto Sans TC", sans-serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 1.7rem; margin: 0 0 6px; }
+  h2 { font-size: 1.25rem; margin: 40px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  h3 { font-size: 1.05rem; margin: 28px 0 10px; }
+  p.lead { color: var(--muted); margin: 0 0 18px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin: 14px 0; }
+  figure { margin: 0 0 12px; }
+  figure img { width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--line); background: #fff; }
+  figure.spec img { background: #000; }
+  figcaption { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 7px 8px; border-top: 1px solid var(--line); vertical-align: middle; }
+  th { color: var(--muted); font-weight: 600; font-size: 0.85rem; }
+  td.label { width: 36%; }
+  td.label b { display: block; }
+  td.label span { color: var(--muted); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+  audio { width: 100%; max-width: 420px; height: 34px; }
+  .tag { display: inline-block; font-size: 0.75rem; padding: 1px 7px; border: 1px solid var(--line);
+         border-radius: 999px; color: var(--muted); margin-left: 6px; vertical-align: middle; }
+  tr.enh td.label b { color: var(--accent); }
+  .scroll { overflow-x: auto; }
+  table.results { min-width: 560px; font-size: 0.9rem; }
+  table.results th, table.results td { white-space: nowrap; }
+  table.results td.num { font-variant-numeric: tabular-nums; }
+  table.results tr.enh td { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  table.results tr.enh td.sys { color: var(--accent); font-weight: 600; }
+  table.results tr.group td { border-top: 2px solid var(--line); }
+  table.results td.total, table.results tr.total td { font-weight: 600; }
+  footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 14px; }
+  a { color: var(--accent); }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .lang { font-size: 0.9rem; color: var(--muted); white-space: nowrap; margin-top: 10px; }
+  .lang b { color: var(--fg); font-weight: 600; }
+  .lang a { text-decoration: none; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <h1>Neural Speech Denoiser — Listening Test</h1>
+    <nav class="lang"><a href="index.html" lang="en">English</a>｜<b>中文</b></nav>
+  </div>
+  <p class="lead">
+    取自公開 VCTK-DEMAND 測試集的五段含噪語音，由編譯後的 C 函式庫以三種模型寬度降噪。所有音檔皆為16 kHz 單聲道；降噪後的音檔是函式庫 int16 串流路徑的實際輸出（抑制強度 1.0），比輸入晚一個 16 ms 幀，與裝置上的執行結果完全相同。建議戴耳機聆聽，並與每張卡片最後一列的乾淨錄音室原音比較。
+  </p>
+
+  <h2>客觀評測</h2>
+  <p class="lead">
+    我們的完整尺寸模型與已發表的輕量級即時降噪模型並列。DNS OVRL 分數取自各模型自己的論文，並非在同一測試集上量測，僅供量級參考。
+  </p>
+  <div class="card">
+    <div class="scroll">
+      <table class="results">
+        <thead>
+          <tr><th>年份</th><th>模型</th><th>參數量</th><th>MMAC / s</th><th>DNS OVRL ↑</th></tr>
+        </thead>
+        <tbody>
+          <tr class="group"><td class="num">2018</td><td class="sys">RNNoise</td><td class="num">~60 K</td><td class="num">~40</td><td class="num">2.53</td></tr>
+          <tr><td class="num">2024</td><td class="sys">FSPEN</td><td class="num">79 K</td><td class="num">89</td><td class="num">未公開</td></tr>
+          <tr><td class="num">2025</td><td class="sys">UL-UNAS</td><td class="num">171 K</td><td class="num">35</td><td class="num">2.71</td></tr>
+          <tr class="enh"><td class="num">2026</td><td class="sys">本專案 (W16)</td><td class="num">≈ 24 K</td><td class="num">33</td><td class="num">2.93</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <p class="lead">
+    我們的三種模型寬度：在保留的含噪測試集上以 DNSMOS（無參考的 P.808 MOS 與 P.835 SIG / BAK / OVRL）評分。模型以 DNS-Challenge 的語音與噪音資料訓練。↑ 越高越好。
+  </p>
+  <div class="card">
+    <div class="scroll">
+      <table class="results">
+        <thead>
+          <tr><th>版本</th><th>可訓練參數</th><th>MMAC / s</th><th>P.808 ↑</th><th>SIG ↑</th><th>BAK ↑</th><th>OVRL ↑</th></tr>
+        </thead>
+        <tbody>
+          <tr class="group"><td class="sys">W16</td><td class="num">≈ 24 K</td><td class="num">33</td><td class="num">3.63</td><td class="num">3.22</td><td class="num">3.95</td><td class="num">2.93</td></tr>
+          <tr><td class="sys">W12</td><td class="num">≈ 15 K</td><td class="num">22</td><td class="num">3.50</td><td class="num">3.15</td><td class="num">3.88</td><td class="num">2.84</td></tr>
+          <tr><td class="sys">W8</td><td class="num">≈ 7.9 K</td><td class="num">14</td><td class="num">3.44</td><td class="num">3.10</td><td class="num">3.80</td><td class="num">2.77</td></tr>
+          <tr class="enh"><td class="sys">W8 + KD（由 W16 蒸餾）</td><td class="num">≈ 7.9 K</td><td class="num">14</td><td class="num">3.48</td><td class="num">3.13</td><td class="num">3.81</td><td class="num">2.80</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <figure>
+      <img src="results/figures/quality_vs_compute.png" alt="各模型版本的 DNSMOS OVRL 對算力" loading="lazy">
+      <figcaption>DNSMOS 整體分數對算力。W8 + KD 在算力不變下比 W8 高 0.03 OVRL。</figcaption>
+    </figure>
+  </div>
+
+  <h2>資源佔用</h2>
+  <p class="lead">
+    嵌入式建置：GCC 15、<code>-O3 -ffast-math</code>、單精度硬體浮點。算力為指令集模擬器量到的指令數，是 cycle 的近似值，不是實際晶片量測。函式庫本身不佔任何靜態 RAM；所有狀態都放在呼叫端提供的單一instance 記憶體區塊中。
+  </p>
+  <div class="card">
+    <div class="scroll">
+      <table class="results">
+        <thead><tr><th></th><th>W16</th><th>W12</th><th>W8 + KD</th></tr></thead>
+        <tbody>
+          <tr class="group"><td>算力（百萬指令 / 秒）</td><td class="num">133.3</td><td class="num">89.8</td><td class="num">54.8</td></tr>
+          <tr><td>每 16 ms 幀的指令數</td><td class="num">2.13 M</td><td class="num">1.44 M</td><td class="num">0.88 M</td></tr>
+          <tr><td>Flash：程式碼 + 權重</td><td class="num">121.7 KB</td><td class="num">86.4 KB</td><td class="num">58.3 KB</td></tr>
+          <tr><td>函式庫靜態 RAM（.bss + .data）</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+          <tr><td>Instance RAM（呼叫端配置）</td><td class="num">95.9 KB</td><td class="num">74.2 KB</td><td class="num">54.3 KB</td></tr>
+          <tr class="total"><td>合計</td><td class="num">217.6 KB</td><td class="num">160.6 KB</td><td class="num">112.6 KB</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2>試聽音檔</h2>
+  <p class="lead">
+    每段音檔的 DNSMOS（無參考）與相對乾淨原音的 SI-SNR，皆直接以播放器背後的檔案計算；SI-SNR 在扣除函式庫的一幀延遲後量測。
+    五段平均 — OVRL：含噪 2.76 → W16 2.89 · W12 2.95 · W8 + KD 2.88（乾淨原音 3.23）；SI-SNR：含噪 10.4 dB → W16 15.8 · W12 16.3 · W8 + KD 15.6 dB。
+  </p>
+  <!-- ===== p232_005 ===== -->
+  <div class="card">
+    <h3>p232_005 <span class="tag">英語 · 男性語者 · 6.2 秒</span></h3>
+    <figure class="spec"><img src="results/figures/spec_p232_005.png" alt="p232_005 的頻譜圖：含噪、W16、W12、W8 + KD、乾淨原音" loading="lazy"><figcaption>由上至下：含噪輸入 · W16 · W12 · W8 + KD · 乾淨原音（0–8 kHz，80 dB 動態範圍）。</figcaption></figure>
+    <table>
+      <tr><td class="label"><b>含噪輸入</b><span>16 kHz，VCTK-DEMAND 測試集</span><span>OVRL 2.51 · SIG 3.55 · BAK 2.54 · SI-SNR 1.9 dB</span></td><td><audio controls preload="none" src="listening/p232_005_noisy.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W16</b><span>函式庫輸出</span><span>OVRL 2.96 · SIG 3.27 · BAK 3.91 · SI-SNR 11.8 dB</span></td><td><audio controls preload="none" src="listening/p232_005_w16.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W12</b><span>函式庫輸出</span><span>OVRL 3.04 · SIG 3.31 · BAK 4.02 · SI-SNR 13.2 dB</span></td><td><audio controls preload="none" src="listening/p232_005_w12.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W8 + KD</b><span>函式庫輸出 · 最小資源佔用</span><span>OVRL 2.82 · SIG 3.13 · BAK 3.86 · SI-SNR 12.6 dB</span></td><td><audio controls preload="none" src="listening/p232_005_w8kd.wav"></audio></td></tr>
+      <tr><td class="label"><b>乾淨原音</b><span>錄音室錄音</span><span>OVRL 3.40 · SIG 3.63 · BAK 4.13</span></td><td><audio controls preload="none" src="listening/p232_005_clean.wav"></audio></td></tr>
+    </table>
+  </div>
+
+  <!-- ===== p232_070 ===== -->
+  <div class="card">
+    <h3>p232_070 <span class="tag">英語 · 男性語者 · 2.5 秒</span></h3>
+    <figure class="spec"><img src="results/figures/spec_p232_070.png" alt="p232_070 的頻譜圖：含噪、W16、W12、W8 + KD、乾淨原音" loading="lazy"><figcaption>由上至下：含噪輸入 · W16 · W12 · W8 + KD · 乾淨原音（0–8 kHz，80 dB 動態範圍）。</figcaption></figure>
+    <table>
+      <tr><td class="label"><b>含噪輸入</b><span>16 kHz，VCTK-DEMAND 測試集</span><span>OVRL 2.85 · SIG 3.60 · BAK 3.20 · SI-SNR 11.3 dB</span></td><td><audio controls preload="none" src="listening/p232_070_noisy.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W16</b><span>函式庫輸出</span><span>OVRL 2.94 · SIG 3.31 · BAK 3.81 · SI-SNR 14.9 dB</span></td><td><audio controls preload="none" src="listening/p232_070_w16.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W12</b><span>函式庫輸出</span><span>OVRL 3.21 · SIG 3.44 · BAK 4.10 · SI-SNR 15.5 dB</span></td><td><audio controls preload="none" src="listening/p232_070_w12.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W8 + KD</b><span>函式庫輸出 · 最小資源佔用</span><span>OVRL 3.08 · SIG 3.35 · BAK 4.03 · SI-SNR 14.6 dB</span></td><td><audio controls preload="none" src="listening/p232_070_w8kd.wav"></audio></td></tr>
+      <tr><td class="label"><b>乾淨原音</b><span>錄音室錄音</span><span>OVRL 3.37 · SIG 3.61 · BAK 4.12</span></td><td><audio controls preload="none" src="listening/p232_070_clean.wav"></audio></td></tr>
+    </table>
+  </div>
+
+  <!-- ===== p232_358 ===== -->
+  <div class="card">
+    <h3>p232_358 <span class="tag">英語 · 男性語者 · 1.7 秒</span></h3>
+    <figure class="spec"><img src="results/figures/spec_p232_358.png" alt="p232_358 的頻譜圖：含噪、W16、W12、W8 + KD、乾淨原音" loading="lazy"><figcaption>由上至下：含噪輸入 · W16 · W12 · W8 + KD · 乾淨原音（0–8 kHz，80 dB 動態範圍）。</figcaption></figure>
+    <table>
+      <tr><td class="label"><b>含噪輸入</b><span>16 kHz，VCTK-DEMAND 測試集</span><span>OVRL 3.21 · SIG 3.54 · BAK 4.00 · SI-SNR 15.5 dB</span></td><td><audio controls preload="none" src="listening/p232_358_noisy.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W16</b><span>函式庫輸出</span><span>OVRL 3.24 · SIG 3.51 · BAK 4.10 · SI-SNR 19.6 dB</span></td><td><audio controls preload="none" src="listening/p232_358_w16.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W12</b><span>函式庫輸出</span><span>OVRL 3.24 · SIG 3.48 · BAK 4.13 · SI-SNR 21.9 dB</span></td><td><audio controls preload="none" src="listening/p232_358_w12.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W8 + KD</b><span>函式庫輸出 · 最小資源佔用</span><span>OVRL 3.22 · SIG 3.45 · BAK 4.15 · SI-SNR 21.7 dB</span></td><td><audio controls preload="none" src="listening/p232_358_w8kd.wav"></audio></td></tr>
+      <tr><td class="label"><b>乾淨原音</b><span>錄音室錄音</span><span>OVRL 3.31 · SIG 3.60 · BAK 4.07</span></td><td><audio controls preload="none" src="listening/p232_358_clean.wav"></audio></td></tr>
+    </table>
+  </div>
+
+  <!-- ===== p257_240 ===== -->
+  <div class="card">
+    <h3>p257_240 <span class="tag">英語 · 女性語者 · 2.9 秒</span></h3>
+    <figure class="spec"><img src="results/figures/spec_p257_240.png" alt="p257_240 的頻譜圖：含噪、W16、W12、W8 + KD、乾淨原音" loading="lazy"><figcaption>由上至下：含噪輸入 · W16 · W12 · W8 + KD · 乾淨原音（0–8 kHz，80 dB 動態範圍）。</figcaption></figure>
+    <table>
+      <tr><td class="label"><b>含噪輸入</b><span>16 kHz，VCTK-DEMAND 測試集</span><span>OVRL 2.71 · SIG 3.57 · BAK 2.98 · SI-SNR 16.7 dB</span></td><td><audio controls preload="none" src="listening/p257_240_noisy.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W16</b><span>函式庫輸出</span><span>OVRL 2.68 · SIG 3.15 · BAK 3.51 · SI-SNR 19.9 dB</span></td><td><audio controls preload="none" src="listening/p257_240_w16.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W12</b><span>函式庫輸出</span><span>OVRL 2.58 · SIG 2.90 · BAK 3.92 · SI-SNR 18.3 dB</span></td><td><audio controls preload="none" src="listening/p257_240_w12.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W8 + KD</b><span>函式庫輸出 · 最小資源佔用</span><span>OVRL 2.72 · SIG 3.11 · BAK 3.69 · SI-SNR 17.9 dB</span></td><td><audio controls preload="none" src="listening/p257_240_w8kd.wav"></audio></td></tr>
+      <tr><td class="label"><b>乾淨原音</b><span>錄音室錄音</span><span>OVRL 3.13 · SIG 3.49 · BAK 3.89</span></td><td><audio controls preload="none" src="listening/p257_240_clean.wav"></audio></td></tr>
+    </table>
+  </div>
+
+  <!-- ===== p257_430 ===== -->
+  <div class="card">
+    <h3>p257_430 <span class="tag">英語 · 女性語者 · 3.4 秒</span></h3>
+    <figure class="spec"><img src="results/figures/spec_p257_430.png" alt="p257_430 的頻譜圖：含噪、W16、W12、W8 + KD、乾淨原音" loading="lazy"><figcaption>由上至下：含噪輸入 · W16 · W12 · W8 + KD · 乾淨原音（0–8 kHz，80 dB 動態範圍）。</figcaption></figure>
+    <table>
+      <tr><td class="label"><b>含噪輸入</b><span>16 kHz，VCTK-DEMAND 測試集</span><span>OVRL 2.50 · SIG 3.52 · BAK 2.60 · SI-SNR 6.7 dB</span></td><td><audio controls preload="none" src="listening/p257_430_noisy.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W16</b><span>函式庫輸出</span><span>OVRL 2.64 · SIG 2.93 · BAK 3.84 · SI-SNR 12.8 dB</span></td><td><audio controls preload="none" src="listening/p257_430_w16.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W12</b><span>函式庫輸出</span><span>OVRL 2.69 · SIG 2.94 · BAK 3.99 · SI-SNR 12.7 dB</span></td><td><audio controls preload="none" src="listening/p257_430_w12.wav"></audio></td></tr>
+      <tr class="enh"><td class="label"><b>W8 + KD</b><span>函式庫輸出 · 最小資源佔用</span><span>OVRL 2.58 · SIG 2.91 · BAK 3.76 · SI-SNR 11.4 dB</span></td><td><audio controls preload="none" src="listening/p257_430_w8kd.wav"></audio></td></tr>
+      <tr><td class="label"><b>乾淨原音</b><span>錄音室錄音</span><span>OVRL 2.93 · SIG 3.35 · BAK 3.78</span></td><td><audio controls preload="none" src="listening/p257_430_clean.wav"></audio></td></tr>
+    </table>
+  </div>
+  <footer>
+    語音素材：<i>Noisy speech database for training speech enhancement algorithms and TTS models</i>（VCTK-DEMAND），C. Valentini-Botinhao，愛丁堡大學，CC BY 4.0 · DNSMOS：Microsoft DNS Challenge（MIT）。完整表格見 repository 內的 <code>README.md</code> 與 <code>results/</code>。
+  </footer>
+</main>
+</body>
+</html>
